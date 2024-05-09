@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -78,6 +79,9 @@ public class InjiControllerTest {
 
     @MockBean
     private IssuersServiceImpl issuersService;
+
+    @MockBean
+    public RestApiClient restApiClient;
 
     @Autowired
     private MockMvc mockMvc;
@@ -231,7 +235,7 @@ public class InjiControllerTest {
                 .thenReturn(getIssuerDTO("Issuer1"))
                 .thenThrow(new ApiNotAccessibleException());
 
-        Mockito.when(issuersService.getCredentialWellKnownFromJson())
+        Mockito.when(restApiClient.getApi(ArgumentMatchers.any(String.class), ArgumentMatchers.any()))
                 .thenReturn(getCredentialIssuerWellKnownResponseDto("Issuer1",
                         List.of(getCredentialSupportedResponse("CredentialType1"))));
 
@@ -264,7 +268,7 @@ public class InjiControllerTest {
 
         IssuersDTO filteredIssuers = new IssuersDTO();
         filteredIssuers.setIssuers(issuers.getIssuers().stream().filter(issuer -> issuer.getDisplay().stream()
-                        .anyMatch(displayDTO -> displayDTO.getName().toLowerCase().contains("Issuer1".toLowerCase())))
+                        .anyMatch(displayDTO -> displayDTO.getTitle().toLowerCase().contains("Issuer1".toLowerCase())))
                 .collect(Collectors.toList()));
 
         Mockito.when(issuersService.getAllIssuers("Issuer1"))

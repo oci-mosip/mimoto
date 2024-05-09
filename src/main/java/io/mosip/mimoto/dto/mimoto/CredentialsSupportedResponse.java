@@ -21,4 +21,5 @@ public class CredentialsSupportedResponse {
     private CredentialDefinitionResponseDto credentialDefinition;
 
     private List<CredentialSupportedDisplayResponse> display;
+    private List<String> order;
 }
