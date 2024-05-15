@@ -166,7 +166,7 @@ public class JoseUtil {
     public String generateJwt(String audience, String clientId, String accessToken) throws Exception {
 
         KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
-        kpg.initialize(1024);
+        kpg.initialize(2048);
         KeyPair kp = kpg.generateKeyPair();
         RSAKey jwk = new RSAKey.Builder((RSAPublicKey) kp.getPublic())
                 .keyUse(KeyUse.SIGNATURE)
