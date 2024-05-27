@@ -26,19 +26,8 @@ function installing_mimoto() {
   sed -i 's/\r$//' copy_secrets.sh
   ./copy_secrets.sh
 
-  echo "Do you have public domain & valid SSL? (Y/n) "
-  echo "Y: if you have public domain & valid ssl certificate"
-  echo "n: If you don't have a public domain and a valid SSL certificate. Note: It is recommended to use this option only in development environments."
-  read -p "" flag
+  ENABLE_INSECURE='--set enable_insecure=true';
 
-  if [ -z "$flag" ]; then
-    echo "'flag' was provided; EXITING;"
-    exit 1;
-  fi
-  ENABLE_INSECURE=''
-  if [ "$flag" = "n" ]; then
-    ENABLE_INSECURE='--set enable_insecure=true';
-  fi
 
   echo  "Copy secrets to config-server namespace"
   ./copy_cm_func.sh secret mimoto-wallet-binding-partner-api-key mimoto config-server
