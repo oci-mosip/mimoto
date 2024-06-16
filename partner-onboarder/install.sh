@@ -6,19 +6,19 @@ if [ $# -ge 1 ] ; then
   export KUBECONFIG=$1
 fi
 
-echo "Do you have public domain & valid SSL? (Y/n) "
-echo "Y: if you have public domain & valid ssl certificate"
-echo "n: if you don't have a public domain and a valid SSL certificate. It will add an ssl certificate in onboarder docker. Only recommended to use in local development environments"
-read -p "" flag
+# echo "Do you have public domain & valid SSL? (Y/n) "
+# echo "Y: if you have public domain & valid ssl certificate"
+# echo "n: if you don't have a public domain and a valid SSL certificate. It will add an ssl certificate in onboarder docker. Only recommended to use in local development environments"
+# read -p "" flag
 
-if [ -z "$flag" ]; then
-  echo "'flag' was provided; EXITING;"
-  exit 1;
-fi
+# if [ -z "$flag" ]; then
+#   echo "'flag' was provided; EXITING;"
+#   exit 1;
+# fi
 ENABLE_INSECURE=''
-if [ "$flag" = "n" ]; then
-  ENABLE_INSECURE='--set onboarding.configmaps.onboarding.ENABLE_INSECURE=true';
-fi
+# if [ "$flag" = "n" ]; then
+#   ENABLE_INSECURE='--set onboarding.configmaps.onboarding.ENABLE_INSECURE=true';
+# fi
 
 NS=mimoto
 CHART_VERSION=12.0.1
@@ -28,8 +28,6 @@ kubectl create ns $NS
 
 function installing_onboarder() {
 
-  read -p "Is values.yaml for onboarder chart set correctly as part of Pre-requisites?(Y/n) " yn;
-  if [ $yn = "Y" ]; then
     echo Istio label
     kubectl label ns $NS istio-injection=disabled --overwrite
     helm repo update
@@ -43,27 +41,30 @@ function installing_onboarder() {
     sed -i 's/\r$//' copy_secrets.sh
     ./copy_secrets.sh
 
-    read -p "Provide onboarder bucket name : " s3_bucket
-    if [[ -z $s3_bucket ]]; then
-      echo "s3_bucket not provided; EXITING;";
-      exit 1;
-    fi
-    if [[ $s3_bucket == *[' !@#$%^&*()+']* ]]; then
-      echo "s3_bucket should not contain spaces / any special character; EXITING";
-      exit 1;
-    fi
-    read -p "Provide onboarder s3 bucket region : " s3_region
-    if [[ $s3_region == *[' !@#$%^&*()+']* ]]; then
-      echo "s3_region should not contain spaces / any special character; EXITING";
-      exit 1;
-    fi
+    # read -p "Provide onboarder bucket name : " s3_bucket
+    # if [[ -z $s3_bucket ]]; then
+    #   echo "s3_bucket not provided; EXITING;";
+    #   exit 1;
+    # fi
+    # if [[ $s3_bucket == *[' !@#$%^&*()+']* ]]; then
+    #   echo "s3_bucket should not contain spaces / any special character; EXITING";
+    #   exit 1;
+    # fi
+    # read -p "Provide onboarder s3 bucket region : " s3_region
+    # if [[ $s3_region == *[' !@#$%^&*()+']* ]]; then
+    #   echo "s3_region should not contain spaces / any special character; EXITING";
+    #   exit 1;
+    # fi
 
-    read -p "Provide S3 URL : " s3_url
-    if [[ -z $s3_url ]]; then
-      echo "s3_url not provided; EXITING;"
-      exit 1;
-    fi
+    # read -p "Provide S3 URL : " s3_url
+    # if [[ -z $s3_url ]]; then
+    #   echo "s3_url not provided; EXITING;"
+    #   exit 1;
+    # fi
 
+    s3_url=$OCI_S3_URL
+    s3_bucket=$MIMOTO_ONBOARDER_BUCKET
+    s3_region=$OCI_REGION
     s3_user_key=$( kubectl -n s3 get cm s3 -o json | jq -r '.data."s3-user-key"' )
 
     echo Onboarding default partners
