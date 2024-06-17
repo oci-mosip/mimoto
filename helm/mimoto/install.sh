@@ -26,7 +26,8 @@ function installing_mimoto() {
   sed -i 's/\r$//' copy_secrets.sh
   ./copy_secrets.sh
 
-  ENABLE_INSECURE='--set enable_insecure=true';
+  ENABLE_INSECURE=''
+  # ENABLE_INSECURE='--set enable_insecure=true';
 
 
   echo  "Copy secrets to config-server namespace"
