@@ -94,7 +94,6 @@ function installing_onboarder() {
 
     echo Reports are moved to S3 under onboarder bucket
     return 0
-  fi
 }
 
 # set commands for error handling.
