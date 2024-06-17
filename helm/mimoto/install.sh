@@ -10,7 +10,7 @@ NS=mimoto
 MIMOTO_CHART_VERSION=0.12.0
 
 echo Create $NS namespace
-kubectl create ns $NS
+#kubectl create ns $NS #The namespace mimoto already created during partner-onboarder setup
 
 function installing_mimoto() {
   echo Istio label
